@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TayrasDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Kullanicilar">
+    <Key>
+      <PropertyRef Name="KullaniciId" />
+    </Key>
+    <Property Name="KullaniciId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KullaniciAdi" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="KullaniciSoyadi" Type="nchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="KullaniciYetkiLink">
+    <Key>
+      <PropertyRef Name="KullaniciYetkiId" />
+    </Key>
+    <Property Name="KullaniciYetkiId" Type="int" Nullable="false" />
+    <Property Name="KullaniciId" Type="int" Nullable="false" />
+    <Property Name="YetkiId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Urunler">
+    <Key>
+      <PropertyRef Name="UrunId" />
+    </Key>
+    <Property Name="UrunId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UrunAdi" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="UrunAciklama" Type="nchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Yetkiler">
+    <Key>
+      <PropertyRef Name="YetkiId" />
+    </Key>
+    <Property Name="YetkiId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="YetkiAdi" Type="nchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_KullaniciYetkiLink_Kullanicilar">
+    <End Role="Kullanicilar" Type="Self.Kullanicilar" Multiplicity="1" />
+    <End Role="KullaniciYetkiLink" Type="Self.KullaniciYetkiLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanicilar">
+        <PropertyRef Name="KullaniciId" />
+      </Principal>
+      <Dependent Role="KullaniciYetkiLink">
+        <PropertyRef Name="KullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KullaniciYetkiLink_Yetkiler">
+    <End Role="Yetkiler" Type="Self.Yetkiler" Multiplicity="1" />
+    <End Role="KullaniciYetkiLink" Type="Self.KullaniciYetkiLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Yetkiler">
+        <PropertyRef Name="YetkiId" />
+      </Principal>
+      <Dependent Role="KullaniciYetkiLink">
+        <PropertyRef Name="YetkiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TayrasDbModelStoreContainer">
+    <EntitySet Name="Kullanicilar" EntityType="Self.Kullanicilar" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="KullaniciYetkiLink" EntityType="Self.KullaniciYetkiLink" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Urunler" EntityType="Self.Urunler" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Yetkiler" EntityType="Self.Yetkiler" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_KullaniciYetkiLink_Kullanicilar" Association="Self.FK_KullaniciYetkiLink_Kullanicilar">
+      <End Role="Kullanicilar" EntitySet="Kullanicilar" />
+      <End Role="KullaniciYetkiLink" EntitySet="KullaniciYetkiLink" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KullaniciYetkiLink_Yetkiler" Association="Self.FK_KullaniciYetkiLink_Yetkiler">
+      <End Role="Yetkiler" EntitySet="Yetkiler" />
+      <End Role="KullaniciYetkiLink" EntitySet="KullaniciYetkiLink" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TayrasDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Kullanicilar">
+    <Key>
+      <PropertyRef Name="KullaniciId" />
+    </Key>
+    <Property Name="KullaniciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KullaniciAdi" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="KullaniciSoyadi" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="KullaniciYetkiLinks" Relationship="Self.FK_KullaniciYetkiLink_Kullanicilar" FromRole="Kullanicilar" ToRole="KullaniciYetkiLink" />
+  </EntityType>
+  <EntityType Name="KullaniciYetkiLink">
+    <Key>
+      <PropertyRef Name="KullaniciYetkiId" />
+    </Key>
+    <Property Name="KullaniciYetkiId" Type="Int32" Nullable="false" />
+    <Property Name="KullaniciId" Type="Int32" Nullable="false" />
+    <Property Name="YetkiId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Kullanicilar" Relationship="Self.FK_KullaniciYetkiLink_Kullanicilar" FromRole="KullaniciYetkiLink" ToRole="Kullanicilar" />
+    <NavigationProperty Name="Yetkiler" Relationship="Self.FK_KullaniciYetkiLink_Yetkiler" FromRole="KullaniciYetkiLink" ToRole="Yetkiler" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Urunler">
+    <Key>
+      <PropertyRef Name="UrunId" />
+    </Key>
+    <Property Name="UrunId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UrunAdi" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="UrunAciklama" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Yetkiler">
+    <Key>
+      <PropertyRef Name="YetkiId" />
+    </Key>
+    <Property Name="YetkiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="YetkiAdi" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="KullaniciYetkiLinks" Relationship="Self.FK_KullaniciYetkiLink_Yetkiler" FromRole="Yetkiler" ToRole="KullaniciYetkiLink" />
+  </EntityType>
+  <Association Name="FK_KullaniciYetkiLink_Kullanicilar">
+    <End Role="Kullanicilar" Type="Self.Kullanicilar" Multiplicity="1" />
+    <End Role="KullaniciYetkiLink" Type="Self.KullaniciYetkiLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanicilar">
+        <PropertyRef Name="KullaniciId" />
+      </Principal>
+      <Dependent Role="KullaniciYetkiLink">
+        <PropertyRef Name="KullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KullaniciYetkiLink_Yetkiler">
+    <End Role="Yetkiler" Type="Self.Yetkiler" Multiplicity="1" />
+    <End Role="KullaniciYetkiLink" Type="Self.KullaniciYetkiLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Yetkiler">
+        <PropertyRef Name="YetkiId" />
+      </Principal>
+      <Dependent Role="KullaniciYetkiLink">
+        <PropertyRef Name="YetkiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TayrasDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Kullanicilars" EntityType="Self.Kullanicilar" />
+    <EntitySet Name="KullaniciYetkiLinks" EntityType="Self.KullaniciYetkiLink" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Urunlers" EntityType="Self.Urunler" />
+    <EntitySet Name="Yetkilers" EntityType="Self.Yetkiler" />
+    <AssociationSet Name="FK_KullaniciYetkiLink_Kullanicilar" Association="Self.FK_KullaniciYetkiLink_Kullanicilar">
+      <End Role="Kullanicilar" EntitySet="Kullanicilars" />
+      <End Role="KullaniciYetkiLink" EntitySet="KullaniciYetkiLinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KullaniciYetkiLink_Yetkiler" Association="Self.FK_KullaniciYetkiLink_Yetkiler">
+      <End Role="Yetkiler" EntitySet="Yetkilers" />
+      <End Role="KullaniciYetkiLink" EntitySet="KullaniciYetkiLinks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
